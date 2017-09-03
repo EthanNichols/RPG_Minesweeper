@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class ClickTile : MonoBehaviour
 {
-
+    //The grid position for the tile
     public Vector2 GridPos { get; set; }
 
     // Use this for initialization
@@ -21,28 +21,43 @@ public class ClickTile : MonoBehaviour
         trigger.triggers.Add(entry);
     }
 
-    void Update()
+    /// <summary>
+    /// Activate the tile if it hasn't been clicked, then
+    /// Move the player to the tile
+    /// </summary>
+    private void Click()
     {
-        if (MapGrid.tiles[GridPos].Clicked)
+        //Test if the player didn't moved the map
+        if (transform.parent.parent.localPosition == transform.parent.parent.GetComponent<MoveMap>().startingMapPos ||
+            transform.parent.parent.GetComponent<MoveMap>().startingMapPos == Vector3.zero)
         {
-            Click();
-            Destroy(GetComponent<ClickTile>());
-            Destroy(GetComponent<EventTrigger>());
+            //Make sure the tile hasn't been clicked, then activate the tile
+            if (!MapGrid.tiles[GridPos].Clicked)
+            {
+                ActivateTile();
+            }
+
+            //Move the player to the tile position
+            GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().MovePlayer(MapGrid.tiles[GridPos].TileObject.transform.position);
         }
     }
 
     /// <summary>
-    /// This is what happens when the tile is clicked
+    /// Activate the tile and display the amount of surrounding bombs
     /// </summary>
-    private void Click()
+    public void ActivateTile()
     {
-        //Check if the tile hasn't been clicked
-        //Change the graphics of the tile
-        gameObject.transform.localEulerAngles = new Vector3(0, 0, 90);
-        MapGrid.tiles[GridPos].Clicked = true;
+        //Make sure the tile hasn't been clicked
+        if (!MapGrid.tiles[GridPos].Clicked)
+        {
+            //Check if the tile hasn't been clicked
+            //Change the graphics of the tile
+            gameObject.transform.localEulerAngles = new Vector3(0, 0, 90);
+            MapGrid.tiles[GridPos].Clicked = true;
 
-        //See if the tile is close to bombs
-        OverlayNumber();
+            //See if the tile is close to bombs
+            OverlayNumber();
+        }
     }
 
     /// <summary>
@@ -89,19 +104,27 @@ public class ClickTile : MonoBehaviour
         //Click other tiles if the tile clicked wasn't a bomb, or near a bomb
         else
         {
-            //Check all around the current tile
-            for (int x = -1; x < 2; x++)
-            {
-                for (int y = -1; y < 2; y++)
-                {
-                    //Calculate the position of the tiles
-                    Vector2 pos = new Vector2(x + GridPos.x, y + GridPos.y);
+            ActivateOtherTiles();
+        }
+    }
 
-                    //Make sure the tile exists, then click the tile
-                    if (MapGrid.tiles.ContainsKey(pos))
-                    {
-                        MapGrid.tiles[pos].Clicked = true;
-                    }
+    /// <summary>
+    /// If the tile doesn't have any bombs surrounding it, activate the adjacent tiles
+    /// </summary>
+    private void ActivateOtherTiles()
+    {
+        //Check all around the current tile
+        for (int x = -1; x < 2; x++)
+        {
+            for (int y = -1; y < 2; y++)
+            {
+                //Calculate the position of the tiles
+                Vector2 pos = new Vector2(x + GridPos.x, y + GridPos.y);
+
+                //Make sure the tile exists, then click the tile
+                if (MapGrid.tiles.ContainsKey(pos))
+                {
+                    MapGrid.tiles[pos].TileObject.GetComponent<ClickTile>().ActivateTile();
                 }
             }
         }

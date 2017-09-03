@@ -6,7 +6,7 @@ public class MoveMap : MonoBehaviour {
 
     //Starting position of the mouse and map when the mouse is dragged
     private Vector3 mouseStartingPos;
-    private Vector3 startingMapPos;
+    public Vector3 startingMapPos;
 	
 	// Update is called once per frame
 	void Update () {
@@ -22,8 +22,11 @@ public class MoveMap : MonoBehaviour {
                 startingMapPos = transform.localPosition;
             }
 
-            //Move the map relative to where the mouse is moving
-            transform.localPosition = startingMapPos - (mouseStartingPos - Input.mousePosition);
+            if (Vector2.Distance(mouseStartingPos, Input.mousePosition) > 5)
+            {
+                //Move the map relative to where the mouse is moving
+                transform.localPosition = startingMapPos - (mouseStartingPos - Input.mousePosition);
+            }
 
         } else
         {
@@ -31,5 +34,13 @@ public class MoveMap : MonoBehaviour {
             mouseStartingPos = Vector3.zero;
             startingMapPos = Vector3.zero;
         }
-	}
+    }
+
+    /// <summary>
+    /// Center the screen to the player's position
+    /// </summary>
+    public void CenterOnPlayer()
+    {
+        transform.localPosition = GameObject.FindGameObjectWithTag("Player").transform.localPosition * -1;
+    }
 }

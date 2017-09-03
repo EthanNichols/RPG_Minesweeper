@@ -4,8 +4,8 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MapGrid {
-
+public class MapGrid
+{
     //List of tiles on the map
     public static Dictionary<Vector2, Tile> tiles = new Dictionary<Vector2, Tile>();
 
@@ -20,14 +20,41 @@ public class MapGrid {
     }
 
     /// <summary>
+    /// Spawn the player on the map
+    /// </summary>
+    public void SpawnPlayer()
+    {
+        //Find a tile with no bombs surrounding it
+        //Spawn the player on the tile
+        //Activate the tile
+        while (true)
+        {
+            List<Vector2> keys = tiles.Keys.ToList();
+            int randomTile = Random.Range(0, keys.Count);
+
+            if (tiles[keys[randomTile]].SurroundingBombs == 0)
+            {
+                tiles[keys[randomTile]].TileObject.GetComponent<ClickTile>().ActivateTile();
+
+                GameObject player = GameObject.Instantiate((GameObject)Resources.Load("Prefabs/Player"), Vector3.zero, Quaternion.identity);
+                player.transform.SetParent(GameObject.Find("Entities").transform);
+                player.transform.localPosition = tiles[keys[randomTile]].TileObject.transform.localPosition;
+                break;
+            }
+        }
+    }
+
+    /// <summary>
     /// Generate the information about the map (Bombs and numbers)
     /// </summary>
     public void GenerateMap()
     {
         //Generate the bombs
         //Calculate the amount of bombs around each tile
-        SetBombs(50);
+        SetBombs((int)(tiles.Count * .2f));
         CalcSurroundingBombs();
+
+        SpawnPlayer();
 
         //Debugging Purposes only
         //DisplayBombs();
@@ -44,7 +71,7 @@ public class MapGrid {
         List<Vector2> keys = tiles.Keys.ToList();
 
         //Create the bombs
-        for (int i=amount; i>0; i--)
+        for (int i = amount; i > 0; i--)
         {
             int randomNum = Random.Range(0, keys.Count());
 
@@ -75,9 +102,9 @@ public class MapGrid {
             tile.Value.SurroundingBombs = 0;
 
             //Check all the tiles that are connected to the tile
-            for(int x=-1; x<2; x++)
+            for (int x = -1; x < 2; x++)
             {
-                for (int y=-1; y<2; y++)
+                for (int y = -1; y < 2; y++)
                 {
                     //The position of the tile being tested
                     Vector2 testingPos = new Vector2(x + tile.Key.x, y + tile.Key.y);
@@ -104,7 +131,7 @@ public class MapGrid {
     /// </summary>
     private void DisplayBombs()
     {
-        foreach(Tile tile in tiles.Values)
+        foreach (Tile tile in tiles.Values)
         {
             //If the tile has a bomb change the color of the tile
             if (tile.Bomb)

@@ -368,8 +368,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18064253ed42b0b4d9fc78b076c1b027, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 100
-  height: 100
+  width: 20
+  height: 20
   tile: {fileID: 1426379277926326, guid: d79ac6d119063a743859c557d3e935b0, type: 2}
 --- !u!114 &2123277075
 MonoBehaviour:

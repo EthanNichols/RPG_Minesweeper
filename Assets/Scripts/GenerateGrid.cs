@@ -30,8 +30,10 @@ public class GenerateGrid : MonoBehaviour {
     /// </summary>
     private void CreateGrid()
     {
-        //Create an empty object to store the tile objects
-        GameObject map = EmptyMapObject();
+        //Create an empty object to store the map, tiles, and entities
+        GameObject map = CreateEmpty("Map", transform);
+        GameObject tiles = CreateEmpty("Tiles", map.transform);
+        GameObject entities = CreateEmpty("Entities", map.transform);
 
         //Loop through the width and the height
         for (int x=0; x<width; x++)
@@ -41,7 +43,7 @@ public class GenerateGrid : MonoBehaviour {
                 //Calculate the map position
                 //Create a new tile
                 Vector2 localPos = new Vector2((x + .5f - width / 2f) * tile.GetComponent<RectTransform>().rect.size.x, (height / 2f - y - .5f) * tile.GetComponent<RectTransform>().rect.size.y);
-                NewTile(localPos, new Vector2(x, y), map);
+                NewTile(localPos, new Vector2(x, y), tiles);
             }
         }
     }
@@ -62,27 +64,33 @@ public class GenerateGrid : MonoBehaviour {
 
         newTile.AddComponent<ClickTile>();
         newTile.GetComponent<ClickTile>().GridPos = gridPos;
+        newTile.name = gridPos.ToString();
 
         //Informationally add the tile to the mapgrid
         grid.AddTile(gridPos, newTile);
     }
 
     /// <summary>
-    /// Create an empty object to keep the map tiles
+    /// Create an empty object for cleanliness
     /// </summary>
+    /// <param name="name">The name of the object</param>
+    /// <param name="parent">The parent the object belongs to</param>
     /// <returns></returns>
-    private GameObject EmptyMapObject()
+    private GameObject CreateEmpty(string name, Transform parent)
     {
         //Create and set the location of the empty object
-        GameObject map = new GameObject();
-        map.transform.SetParent(transform);
-        map.transform.localPosition = Vector3.zero;
-        map.name = "Map";
+        GameObject empty = new GameObject();
+        empty.transform.SetParent(parent);
+        empty.transform.localPosition = Vector3.zero;
+        empty.name = name;
 
         //Add a componenet that allows the map to be moved around
-        map.AddComponent<MoveMap>();
+        if (name == "Map")
+        {
+            empty.AddComponent<MoveMap>();
+        }
 
         //Return the created object
-        return map;
+        return empty;
     }
 }
