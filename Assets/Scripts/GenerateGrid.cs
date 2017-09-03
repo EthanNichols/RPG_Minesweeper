@@ -60,6 +60,9 @@ public class GenerateGrid : MonoBehaviour {
         newTile.transform.SetParent(map.transform);
         newTile.transform.localPosition = localPosition;
 
+        newTile.AddComponent<ClickTile>();
+        newTile.GetComponent<ClickTile>().GridPos = gridPos;
+
         //Informationally add the tile to the mapgrid
         grid.AddTile(gridPos, newTile);
     }

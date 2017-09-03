@@ -7,11 +7,6 @@ public class MoveMap : MonoBehaviour {
     //Starting position of the mouse and map when the mouse is dragged
     private Vector3 mouseStartingPos;
     private Vector3 startingMapPos;
-
-	// Use this for initialization
-	void Start () {
-		
-	}
 	
 	// Update is called once per frame
 	void Update () {

@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class MapGrid {
 
     //List of tiles on the map
-    Dictionary<Vector2, Tile> tiles = new Dictionary<Vector2, Tile>();
+    public static Dictionary<Vector2, Tile> tiles = new Dictionary<Vector2, Tile>();
 
     /// <summary>
     /// Create a Tile and add it to the list of tiles in the map
@@ -26,7 +26,7 @@ public class MapGrid {
     {
         //Generate the bombs
         //Calculate the amount of bombs around each tile
-        SetBombs(80);
+        SetBombs(50);
         CalcSurroundingBombs();
 
         //Debugging Purposes only
