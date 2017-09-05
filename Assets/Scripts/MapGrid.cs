@@ -55,6 +55,7 @@ public class MapGrid
         CalcSurroundingBombs();
 
         SpawnPlayer();
+        PlaceLadder();
 
         //Debugging Purposes only
         //DisplayBombs();
@@ -77,7 +78,7 @@ public class MapGrid
 
             //Set that there is a bomb at a random tile
             //Remove the tile with the bomb from the list of positions
-            tiles[keys[randomNum]].Bomb = true;
+            tiles[keys[randomNum]].Entity = true;
             keys.Remove(keys[randomNum]);
         }
     }
@@ -92,7 +93,7 @@ public class MapGrid
         foreach (KeyValuePair<Vector2, Tile> tile in tiles)
         {
             //If the tile has a bomb skip calculating the surrounding bombs
-            if (tile.Value.Bomb)
+            if (tile.Value.Entity)
             {
                 tile.Value.SurroundingBombs = -1;
                 continue;
@@ -114,7 +115,7 @@ public class MapGrid
                     //Increase the amount of bombs surrounding the tile
                     if (tiles.ContainsKey(testingPos))
                     {
-                        if (tiles[testingPos].Bomb)
+                        if (tiles[testingPos].Entity)
                         {
                             tile.Value.SurroundingBombs++;
                         }
@@ -134,7 +135,7 @@ public class MapGrid
         foreach (Tile tile in tiles.Values)
         {
             //If the tile has a bomb change the color of the tile
-            if (tile.Bomb)
+            if (tile.Entity)
             {
                 tile.TileObject.GetComponent<Image>().color = new Color(0, 0, 0);
             }
@@ -146,6 +147,22 @@ public class MapGrid
         foreach (Tile tile in tiles.Values)
         {
             tile.TileObject.name = tile.SurroundingBombs.ToString();
+        }
+    }
+
+    private void PlaceLadder()
+    {
+        while(true)
+        {
+            foreach(Tile tile in tiles.Values)
+            {
+                if (tile.Entity &&
+                    Random.Range(0, 10) == 1)
+                {
+                    tile.ladder = true;
+                    return;
+                }
+            }
         }
     }
 }

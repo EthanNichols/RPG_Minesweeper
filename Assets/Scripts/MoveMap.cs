@@ -34,6 +34,8 @@ public class MoveMap : MonoBehaviour {
             mouseStartingPos = Vector3.zero;
             startingMapPos = Vector3.zero;
         }
+
+        BoardCleared();
     }
 
     /// <summary>
@@ -42,5 +44,33 @@ public class MoveMap : MonoBehaviour {
     public void CenterOnPlayer()
     {
         transform.localPosition = GameObject.FindGameObjectWithTag("Player").transform.localPosition * -1;
+    }
+
+    private void BoardCleared()
+    {
+        Tile ladderTile = null;
+
+        foreach (Tile tile in MapGrid.tiles.Values)
+        {
+            if (tile.ladder)
+            {
+                ladderTile = tile;
+            }
+
+            bool returnFunction = false;
+            if (tile.Entity &&
+                !tile.Flagged)
+            {
+                return;
+            }
+        }
+
+        if (ladderTile.Flagged)
+        {
+            ladderTile.TileObject.GetComponent<ClickTile>().FlagTile();
+        }
+
+        ladderTile.TileObject.GetComponent<ClickTile>().ActivateTile();
+        ladderTile.Clicked = true;
     }
 }
