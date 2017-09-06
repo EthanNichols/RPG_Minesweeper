@@ -35,6 +35,7 @@ public class MoveMap : MonoBehaviour {
             startingMapPos = Vector3.zero;
         }
 
+        //Check if the board has been cleared
         BoardCleared();
     }
 
@@ -46,31 +47,38 @@ public class MoveMap : MonoBehaviour {
         transform.localPosition = GameObject.FindGameObjectWithTag("Player").transform.localPosition * -1;
     }
 
+    /// <summary>
+    /// Test whether all the bombs have been found or not
+    /// </summary>
     private void BoardCleared()
     {
+        //The tile with the ladder on it
         Tile ladderTile = null;
 
+        //Get information about all the tiles
         foreach (Tile tile in MapGrid.tiles.Values)
         {
+            //Set the tile with the ladder on it
             if (tile.ladder)
             {
                 ladderTile = tile;
             }
 
-            bool returnFunction = false;
-            if (tile.Entity &&
-                !tile.Flagged)
+            //If there is a tile without an entity that hasn't been clicked exit the function
+            if (!tile.Entity &&
+                !tile.Clicked)
             {
                 return;
             }
         }
 
+        //Remove the flag from the ladder tile, if it is flagges
         if (ladderTile.Flagged)
         {
             ladderTile.TileObject.GetComponent<ClickTile>().FlagTile();
         }
 
+        //Activate the tile with the ladder
         ladderTile.TileObject.GetComponent<ClickTile>().ActivateTile();
-        ladderTile.Clicked = true;
     }
 }

@@ -9,7 +9,6 @@ public class Tile {
 
     //Whether the tile has been clicked or not
     //The amount of bombs around this tile
-    //Whether this tile has an entity or not
     public bool Clicked { get; set; }
     public int SurroundingBombs { get; set; }
 

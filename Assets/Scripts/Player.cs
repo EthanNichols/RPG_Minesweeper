@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour {
 
+    public float health;
+
     private Vector2 gridpos;
     private Vector2 lastPos;
 
