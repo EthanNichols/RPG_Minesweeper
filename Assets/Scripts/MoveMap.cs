@@ -25,7 +25,7 @@ public class MoveMap : MonoBehaviour {
             if (Vector2.Distance(mouseStartingPos, Input.mousePosition) > 5)
             {
                 //Move the map relative to where the mouse is moving
-                transform.localPosition = startingMapPos - (mouseStartingPos - Input.mousePosition);
+                transform.localPosition = startingMapPos - ((mouseStartingPos - Input.mousePosition) * transform.localScale.x);
             }
 
         } else
