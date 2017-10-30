@@ -32,8 +32,8 @@ public class GenerateGrid : MonoBehaviour {
     {
         //Create an empty object to store the map, tiles, and entities
         GameObject map = CreateEmpty("Map", transform);
-        GameObject tiles = CreateEmpty("Tiles", map.transform);
         GameObject entities = CreateEmpty("Entities", map.transform);
+        GameObject tiles = CreateEmpty("Tiles", map.transform);
 
         //Loop through the width and the height
         for (int x=0; x<width; x++)
@@ -61,6 +61,7 @@ public class GenerateGrid : MonoBehaviour {
         GameObject newTile = Instantiate(tile, Vector3.zero, Quaternion.identity);
         newTile.transform.SetParent(map.transform);
         newTile.transform.localPosition = localPosition;
+        newTile.transform.localScale = new Vector3(1, 1, 1);
 
         newTile.AddComponent<ClickTile>();
         newTile.GetComponent<ClickTile>().GridPos = gridPos;
@@ -81,7 +82,9 @@ public class GenerateGrid : MonoBehaviour {
         //Create and set the location of the empty object
         GameObject empty = new GameObject();
         empty.transform.SetParent(parent);
+        empty.transform.SetAsFirstSibling();
         empty.transform.localPosition = Vector3.zero;
+        empty.transform.localScale = new Vector3(1, 1, 1);
         empty.name = name;
 
         //Add a componenet that allows the map to be moved around

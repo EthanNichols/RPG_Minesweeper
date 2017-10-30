@@ -107,6 +107,7 @@ public class ClickTile : MonoBehaviour
             GameObject overlayNumber = Instantiate((GameObject)Resources.Load("Prefabs/Tile"));
             overlayNumber.transform.SetParent(transform);
             overlayNumber.transform.localPosition = Vector3.zero;
+            overlayNumber.transform.localScale = new Vector3(1, 1, 1);
 
             overlayNumber.GetComponent<Image>().sprite = numImage;
         }
@@ -161,6 +162,7 @@ public class ClickTile : MonoBehaviour
             GameObject overlayNumber = Instantiate((GameObject)Resources.Load("Prefabs/Tile"));
             overlayNumber.transform.SetParent(transform);
             overlayNumber.transform.localPosition = Vector3.zero;
+            overlayNumber.transform.localScale = new Vector3(1, 1, 1);
 
             overlayNumber.GetComponent<Image>().sprite = Resources.Load<Sprite>("Flag");
 

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class MoveMap : MonoBehaviour {
 
+    public float zoomDistance = .5f;
+    public float zoomSpeed = .2f;
+
     //Starting position of the mouse and map when the mouse is dragged
     private Vector3 mouseStartingPos;
     public Vector3 startingMapPos;
@@ -25,7 +28,7 @@ public class MoveMap : MonoBehaviour {
             if (Vector2.Distance(mouseStartingPos, Input.mousePosition) > 5)
             {
                 //Move the map relative to where the mouse is moving
-                transform.localPosition = startingMapPos - ((mouseStartingPos - Input.mousePosition) * transform.localScale.x);
+                transform.localPosition = startingMapPos - ((mouseStartingPos - Input.mousePosition) * 0.6061921f);
             }
 
         } else
@@ -33,6 +36,19 @@ public class MoveMap : MonoBehaviour {
             //Reset the starting position for the mouse and map
             mouseStartingPos = Vector3.zero;
             startingMapPos = Vector3.zero;
+        }
+
+        //Test if the mouse is being scrolled
+        if (Input.mouseScrollDelta.magnitude != 0)
+        {
+            //Change the size of the map
+            transform.localScale += new Vector3(zoomSpeed, zoomSpeed, zoomSpeed) * Input.mouseScrollDelta.y;
+
+            //Make sure the player doesn't zoom too far out to flip the map
+            if (transform.localScale.x < zoomDistance)
+            {
+                transform.localScale = new Vector3(zoomDistance, zoomDistance, zoomDistance);
+            }
         }
 
         //Check if the board has been cleared
